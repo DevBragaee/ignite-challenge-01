@@ -14,16 +14,48 @@ export function TaskList() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
+     // funcao que manipula a criaçao de uma nova tarefa
   function handleCreateNewTask() {
-    // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
-  }
+    // impede que seja criada uma task vazia
+    if(!newTaskTitle) return; 
+      const addNewTask = {
+        id:Math.random(),
+        title:newTaskTitle, 
+        isComplete: false
+      }
+      /* 'setState' pode ser usado na forma de callback
+usando o conceito de "spreadoperator " que mantem o estado anterior"oldState" */
+     
 
+      setTasks(oldState=>[...oldState,addNewTask]);
+      setNewTaskTitle('');
+       
+    }
+    
+    
+    
+     // funcao que vai manipular a comutacao de estado da variavel "isComplete" e seta-lo
+    /* precisamos ir na task ,mapear a task pelo id especifico ,entao altera-lo
+    e seta-lo no estado.
+    para isso usamos o operador TERNARIO*/
   function handleToggleTaskCompletion(id: number) {
-    // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    const newTasks = tasks.map(task=>task.id == id ?{
+      ...task,
+      isComplete:!task.isComplete
+      }:task)
+      
+      setTasks(newTasks)
+   
   }
 
   function handleRemoveTask(id: number) {
-    // Remova uma task da listagem pelo ID
+    //remover tarefa: 
+    const filteredTasks = tasks.filter(task=>task.id !== id);
+   // Aqui estamos setando a array de tasks com as tasks filtradas
+   // criando um novo objeto nunca alterando(imutabilidade)
+   // alocando um novo espaço na memoria(mais inteligente) 
+   setTasks(filteredTasks);
+    
   }
 
   return (
